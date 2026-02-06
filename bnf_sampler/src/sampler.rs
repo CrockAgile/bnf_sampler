@@ -216,7 +216,7 @@ impl Sampler {
     pub fn all_possible_next_tokens(
         &mut self,
         input_token_id: Option<u32>,
-    ) -> Result<PossibleTokensResult, Error> {
+    ) -> Result<PossibleTokensResult<'_>, Error> {
         // let now = Instant::now();
         self.token_ids.clear();
         match self.accept_a_token(input_token_id)? {
@@ -346,7 +346,7 @@ impl Sampler {
                                     if let Some(top) = top {
                                         new_vec.push(top);
                                     }
-                                    if !self.stacks[len..].iter().any(|x| *x == new_vec) {
+                                    if !self.stacks[len..].contains(&new_vec) {
                                         self.stacks.push(new_vec);
                                     }
                                 },
@@ -634,7 +634,7 @@ impl Sampler {
         match stack.pop() {
             Some(value) => match value {
                 StackItem::Nonterminal(top) => {
-                    return _find_stacks_matching_bytes(
+                    _find_stacks_matching_bytes(
                         arena,
                         top,
                         stack.as_raw_slice(),

@@ -16,7 +16,7 @@ impl<T: Clone + Copy> BufferArena<T> {
         }
     }
 
-    pub fn allocate_a_stack(&mut self, capacity: usize) -> Result<FixedBuffer<T>, Error> {
+    pub fn allocate_a_stack(&mut self, capacity: usize) -> Result<FixedBuffer<'_, T>, Error> {
         ensure!(
             self.current_ptr + capacity <= self.arena.len(),
             "Not enough arena capacity: current capacity {} is smaller than requested capacity {}. Increase arena_capacity or grammar_arena_capacity.",

@@ -63,6 +63,7 @@ impl qp_trie::Break for U8ArrayWrapper {
 }
 
 #[derive(PartialEq, Clone, Debug, Eq, Hash)]
+#[allow(dead_code)]
 pub(crate) struct SliceU8Wrapper<'a>(pub &'a [u8]);
 
 impl<'a> Borrow<[u8]> for SliceU8Wrapper<'a> {
@@ -132,21 +133,17 @@ pub fn read_rwkv_world_vocab(path: impl AsRef<Path>) -> Result<Arc<Vocabulary>, 
 ///
 /// sequence need to be unescaped:
 ///
+/// ```text
 ///     "\\symbol", ["\\", "symbol"]
-///
 ///     "\\",       ["\\"]
-///
 ///     "\\t",      ["\\", "t"]
-///
 ///     "\\n",      ["\\", "n"]
-///
 ///     "\\r",      ["\\", "r"]
-///
 ///     "\\x12",    ["\\", "x", "1", "2"]
-///
 ///     "\\u1234",  ["\\", "u", "1", "2", "3", "4"]
+/// ```
 pub fn fix_utf8_escape(token: &str) -> Vec<u8> {
-    let mut result: Vec<u8> = Vec::with_capacity(token.as_bytes().len());
+    let mut result: Vec<u8> = Vec::with_capacity(token.len());
     let mut token = token;
     let convert_to_utf8 = |c: char, buffer: &mut Vec<u8>| {
         let mut temp = [0, 0, 0, 0];

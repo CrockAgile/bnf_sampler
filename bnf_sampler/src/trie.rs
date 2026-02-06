@@ -133,13 +133,13 @@ impl TerminalsTrie {
         _except_literal(self, self.roots[&nonterminal_id], terminal, 0);
     }
 
-    pub fn iter(&self, start_node_id: TrieNodeID) -> TerminalsTrieIter {
+    pub fn iter(&self, start_node_id: TrieNodeID) -> TerminalsTrieIter<'_> {
         let stack = vec![self.get(start_node_id).children.iter()];
-        return TerminalsTrieIter {
+        TerminalsTrieIter {
             trie: self,
             initial_index: self.get(start_node_id).index as usize,
             stack,
-        };
+        }
     }
 }
 #[derive(PartialEq, Clone, Debug, Copy, Eq, Hash)]
